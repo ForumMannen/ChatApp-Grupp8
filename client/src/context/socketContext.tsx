@@ -31,9 +31,12 @@ export const useSocket = () => useContext(SocketContext);
 const socket = io("http://localhost:3000", { autoConnect: false });
 
 const SocketProvider = ({ children }: PropsWithChildren) => {
+  //const roomsList = [{ id: "lobby", name: "lobby"}];
   const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [room, setRoom] = useState("");
+
+  // roomsList.push([...lobby, room])
 
   useEffect(() => {
     if (room) {
