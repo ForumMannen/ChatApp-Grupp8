@@ -18,7 +18,7 @@ interface ISocketContext {
   createNewRoom: (newRoomName: string) => void;
   updatedRoomList: { id: string; name: string }[];
 }
-0;
+
 const defaultValues = {
   username: "",
   isLoggedIn: false,
@@ -37,17 +37,11 @@ export const useSocket = () => useContext(SocketContext);
 const socket = io("http://localhost:3000", { autoConnect: false });
 
 const SocketProvider = ({ children }: PropsWithChildren) => {
-  // const roomsList = [{ id: "lobby", name: "lobby"}];
+  const roomList = [{ id: "lobby", name: "Lobby" }];
   const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [room, setRoom] = useState("");
-  const [updatedRoomList, setUpdatedRoomList] = useState([]);
-  //  roomsList.push(room);
-  const roomList = [
-    { id: "123", name: "Rum 123" },
-    { id: "456", name: "Rum 456" },
-    { id: "789", name: "Rum 789" },
-  ];
+  const [updatedRoomList, setUpdatedRoomList] = useState(roomList);
 
   useEffect(() => {
     if (room) {
@@ -55,18 +49,25 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     }
   }, [room]);
 
+  // useEffect(() => {
+  //   socket.on("New_room_is_added_to_list", (updatedRooms) => {
+  //     setUpdatedRoomList(updatedRooms);
+  //   });
+  // }, [updatedRoomList]);
+
   const login = () => {
     socket.connect();
     setIsLoggedIn(true);
-    setRoom("lobby");
+    setRoom(roomList[0].id);
   };
 
   const createNewRoom = (newRoomName: string) => {
-    const newRoom = { id: socket.id, name: newRoomName };
-    setRoom(newRoom); // Byt till det nya rummet
-    // rooms.push(newRoom); // Lägg till det nya rummet i listan
-    const updatedRooms = [...roomList, newRoom];
+    const newRoom = { id: newRoomName, name: newRoomName };
+    setRoom(newRoom);
+    const updatedRooms = [...updatedRoomList, newRoom];
     setUpdatedRoomList(updatedRooms);
+    // socket.emit("create_new_room", newRoom);
+
     console.log("Nytt rum skapat:", newRoom);
     console.log("här är listan på rooms ", updatedRooms);
   };
