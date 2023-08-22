@@ -14,7 +14,7 @@ interface ISocketContext {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   room: string;
   setRoom: React.Dispatch<React.SetStateAction<string>>;
-  rooms: { id: string; name: string }[];
+  roomList: { id: string; name: string }[];
   createNewRoom: (newRoomName: string) => void;
   updatedRoomList: { id: string; name: string }[];
 }
@@ -26,7 +26,7 @@ const defaultValues = {
   setUsername: () => {},
   room: "",
   setRoom: () => {},
-  rooms: [],
+  roomList: [],
   createNewRoom: () => {},
   updatedRoomList: [],
 };
@@ -43,7 +43,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
   const [room, setRoom] = useState("");
   const [updatedRoomList, setUpdatedRoomList] = useState([]);
   //  roomsList.push(room);
-  const rooms = [
+  const roomList = [
     { id: "123", name: "Rum 123" },
     { id: "456", name: "Rum 456" },
     { id: "789", name: "Rum 789" },
@@ -65,7 +65,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const newRoom = { id: socket.id, name: newRoomName };
     setRoom(newRoom); // Byt till det nya rummet
     // rooms.push(newRoom); // Lägg till det nya rummet i listan
-    const updatedRooms = [...rooms, newRoom];
+    const updatedRooms = [...roomList, newRoom];
     setUpdatedRoomList(updatedRooms);
     console.log("Nytt rum skapat:", newRoom);
     console.log("här är listan på rooms ", updatedRooms);
@@ -80,7 +80,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         setUsername,
         room,
         setRoom,
-        rooms,
+        roomList,
         createNewRoom,
         updatedRoomList,
       }}
