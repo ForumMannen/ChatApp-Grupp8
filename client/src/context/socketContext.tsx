@@ -14,9 +14,9 @@ interface ISocketContext {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   room: string;
   setRoom: React.Dispatch<React.SetStateAction<string>>;
-  roomList: { id: string; name: string }[];
+
   createNewRoom: (newRoomName: string) => void;
-  updatedRoomList: { id: string; name: string }[];
+  updatedRoomList: string[];
 }
 
 const defaultValues = {
@@ -26,7 +26,6 @@ const defaultValues = {
   setUsername: () => {},
   room: "",
   setRoom: () => {},
-  roomList: [],
   createNewRoom: () => {},
   updatedRoomList: [],
 };
@@ -37,11 +36,10 @@ export const useSocket = () => useContext(SocketContext);
 const socket = io("http://localhost:3000", { autoConnect: false });
 
 const SocketProvider = ({ children }: PropsWithChildren) => {
-  const roomList = [{ id: "lobby", name: "Lobby" }];
   const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [room, setRoom] = useState("");
-  const [updatedRoomList, setUpdatedRoomList] = useState(roomList);
+  const [updatedRoomList, setUpdatedRoomList] = useState([]);
 
   useEffect(() => {
     if (room) {
@@ -49,27 +47,20 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     }
   }, [room]);
 
-  // useEffect(() => {
-  //   socket.on("New_room_is_added_to_list", (updatedRooms) => {
-  //     setUpdatedRoomList(updatedRooms);
-  //   });
-  // }, [updatedRoomList]);
+  useEffect(() => {
+    socket.on("Updated_rooms", (updatedRooms) => {
+      setUpdatedRoomList(updatedRooms);
+    });
+  }, [socket]);
 
   const login = () => {
     socket.connect();
     setIsLoggedIn(true);
-    setRoom(roomList[0].id);
+    setRoom("Lobby");
   };
 
   const createNewRoom = (newRoomName: string) => {
-    const newRoom = { id: newRoomName, name: newRoomName };
-    setRoom(newRoom);
-    const updatedRooms = [...updatedRoomList, newRoom];
-    setUpdatedRoomList(updatedRooms);
-    // socket.emit("create_new_room", newRoom);
-
-    console.log("Nytt rum skapat:", newRoom);
-    console.log("här är listan på rooms ", updatedRooms);
+    setRoom(newRoomName);
   };
 
   return (
@@ -81,7 +72,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         setUsername,
         room,
         setRoom,
-        roomList,
         createNewRoom,
         updatedRoomList,
       }}
