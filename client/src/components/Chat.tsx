@@ -16,9 +16,17 @@ function Chat() {
       />
       <button onClick={() => createNewRoom(newRoomName)}>Gå med</button>
       <h2>Rooms</h2>
-      {updatedRoomList.map((room) => (
-        <li key={room.id}>{room.name} </li>
-      ))}
+      {/* {updatedRoomList.map((room, index) => (
+        <li key={index}>{room} </li>
+      ))} */}
+
+      <ul>
+        {Object.keys(updatedRoomList).map((key) => (
+          <li key={key}>
+            {key}: {updatedRoomList[key].id}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
