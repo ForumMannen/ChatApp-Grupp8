@@ -34,6 +34,10 @@ io.on("connection", (socket) => {
     console.log(io.sockets.adapter.rooms);
   });
 
+  socket.on("send_message", (message) => {
+    socket.to(message.room).emit("incoming_message", message);
+  });
+
   socket.on("disconnect", () => {
     const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
     io.emit("Updated_rooms", roomList);
@@ -44,8 +48,14 @@ io.on("connection", (socket) => {
 function convertMapOfSetsToObjectOfArrays(mapOfSets) {
   const objectOfArrays = {};
 
+  if (!mapOfSets.has("Lobby")) {
+    mapOfSets.set("Lobby", new Set());
+  }
+
   for (const [key, set] of mapOfSets) {
-    objectOfArrays[key] = Array.from(set);
+    if (!set.has(key)) {
+      objectOfArrays[key] = Array.from(set);
+    }
   }
 
   return objectOfArrays;

@@ -14,9 +14,17 @@ interface ISocketContext {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   room: string;
   setRoom: React.Dispatch<React.SetStateAction<string>>;
-
   createNewRoom: (newRoomName: string) => void;
   updatedRoomList: string[];
+  handleClickRoom: (key: string) => void;
+  sendMessage: (message: string) => void;
+  messageList: MessageData[];
+}
+
+interface MessageData {
+  room: string;
+  author: string;
+  message: string;
 }
 
 const defaultValues = {
@@ -28,6 +36,9 @@ const defaultValues = {
   setRoom: () => {},
   createNewRoom: () => {},
   updatedRoomList: [],
+  handleClickRoom: () => {},
+  sendMessage: () => {},
+  messageList: [],
 };
 
 const SocketContext = createContext<ISocketContext>(defaultValues);
@@ -39,7 +50,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
   const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [room, setRoom] = useState("");
-  const [updatedRoomList, setUpdatedRoomList] = useState([]);
+  const [updatedRoomList, setUpdatedRoomList] = useState<string[]>([]);
+  const [messageList, setMessageList] = useState<MessageData[]>([]);
 
   useEffect(() => {
     if (room) {
@@ -50,6 +62,9 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     socket.on("Updated_rooms", (updatedRooms) => {
       setUpdatedRoomList(updatedRooms);
+    });
+    socket.on("incoming_message", (data: MessageData) => {
+      setMessageList((list) => [...list, data]);
     });
   }, [socket]);
 
@@ -63,6 +78,23 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     setRoom(newRoomName);
   };
 
+  const handleClickRoom = (key: string) => {
+    console.log("jag har klickat:", key);
+    setRoom(key);
+  };
+
+  const sendMessage = async (message: string) => {
+    if (message !== "") {
+      const messageData = {
+        room: room,
+        author: username,
+        message: message,
+      };
+      await socket.emit("send_message", messageData);
+      setMessageList((list) => [...list, messageData]);
+    }
+  };
+
   return (
     <SocketContext.Provider
       value={{
@@ -74,6 +106,9 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         setRoom,
         createNewRoom,
         updatedRoomList,
+        handleClickRoom,
+        sendMessage,
+        messageList,
       }}
     >
       {children}
