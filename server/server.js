@@ -14,15 +14,8 @@ const io = new Server(server, {
 
 app.use(cors());
 
-// const rooms = ["Lobby"];
-
 io.on("connection", (socket) => {
   console.log("New user connected: ", socket.id);
-  // const defaultRoom = rooms[0];
-  // socket.join(defaultRoom);
-  // socket.room = defaultRoom;
-  // io.emit("Updated_rooms", rooms);
-  // console.log(io.sockets.adapter.rooms);
 
   socket.on("join_room", (room) => {
     socket.leave(socket.room);
@@ -32,6 +25,11 @@ io.on("connection", (socket) => {
     const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
     io.emit("Updated_rooms", roomList);
     console.log(io.sockets.adapter.rooms);
+  });
+
+  socket.on("user_typing", (data) => {
+    socket.to(socket.room).emit("typing_status", socket.id, data.isTyping);
+    console.log(socket.id, data.isTyping);
   });
 
   socket.on("send_message", (message) => {

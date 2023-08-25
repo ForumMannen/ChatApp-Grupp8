@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSocket } from "../context/socketContext";
+// import { io } from "socket.io-client";
 
 function Chat() {
   const {
@@ -8,9 +9,22 @@ function Chat() {
     handleClickRoom,
     sendMessage,
     messageList,
+    message,
+    setMessage,
+    userThatIsTyping,
+    isTyping,
   } = useSocket();
   const [newRoomName, setNewRoomName] = useState(""); // Här sparas värdet från inputfältet
-  const [message, setMessage] = useState("");
+
+  // const [message, setMessage] = useState("");
+
+  //   const handleInputChange = () => {
+
+  //   }
+
+  // useEffect(() => {
+
+  // },[message])
 
   return (
     // Gör dynamiskt, lista.
@@ -21,7 +35,14 @@ function Chat() {
           value={newRoomName}
           onChange={(e) => setNewRoomName(e.target.value)}
         />
-        <button onClick={() => createNewRoom(newRoomName)}>Gå med</button>
+        <button
+          onClick={() => {
+            createNewRoom(newRoomName);
+            setNewRoomName("");
+          }}
+        >
+          Gå med
+        </button>
         <h2>Rooms</h2>
         {/* {updatedRoomList.map((room, index) => (
         <li key={index}>{room} </li>
@@ -29,10 +50,13 @@ function Chat() {
 
         <ul>
           {Object.keys(updatedRoomList).map((key: string) => {
-            const room = updatedRoomList[key];
+            const usersInRoom = updatedRoomList[key];
             return (
               <li key={key} onClick={() => handleClickRoom(key)}>
-                {key} {room.id}
+                {key}{" "}
+                {usersInRoom.map((user: string) => (
+                  <p key={user}>{user}</p>
+                ))}
               </li>
             );
           })}
@@ -48,11 +72,27 @@ function Chat() {
             </div>
           );
         })}
+        {userThatIsTyping && isTyping ? (
+          <div>
+            <p>{userThatIsTyping} is typing</p>
+          </div>
+        ) : null}
       </div>
 
       <div className="messageInput">
-        <input type="text" onChange={(e) => setMessage(e.target.value)} />
-        <button onClick={() => sendMessage(message)}>Send</button>
+        <input
+          value={message}
+          type="text"
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button
+          onClick={() => {
+            sendMessage(message);
+            setMessage("");
+          }}
+        >
+          Send
+        </button>
       </div>
     </div>
   );
