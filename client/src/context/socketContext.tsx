@@ -70,6 +70,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (room) {
+      setMessageList([]);
       socket.emit("join_room", room, username);
     }
   }, [room]);

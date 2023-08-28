@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:wght@100;300;500;700&display=swap");
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.loginContainer {
+  background-color: lightcoral;
+  font-family: "Raleway", sans-serif;
+}
+
+.header {
+  background-color: rgb(28, 29, 29);
+  color: rgb(67, 67, 67);
+  font-family: "Raleway", sans-serif;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  letter-spacing: 0.7rem;
+}
+
+.appContainer {
+  background-color: aquamarine;
+  display: flex;
+  justify-content: center;
+  font-family: "Raleway", sans-serif;
+}
+
+.navBar {
+  background-color: rgb(70, 72, 72);
+  color: rgb(182, 255, 254);
+  height: 100vh;
+  width: 35%;
+}
+
+.navBar h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(43, 45, 45);
+  color: rgb(103, 244, 241);
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.07rem;
+}
+
+.createRoomContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+}
+
+.navBar input {
+  margin-right: 1rem;
+  background-color: rgb(43, 45, 45);
+  border: none;
+  color: rgb(103, 244, 241);
+  padding-left: 0.5rem;
+}
+
+/* Knapp ej rund */
+.navBar button {
+  background-color: rgb(43, 45, 45);
+  color: rgb(103, 244, 241);
+  font-size: 2.5rem;
+  padding: 0rem 0.7rem;
+  border-radius: 50%;
+  border: none;
+}
+
+.roomList {
+  margin-left: 3rem;
+  font-size: 1.3rem;
+}
+
+.roomList li {
+  margin-bottom: 2rem;
+  font-weight: bold;
+  list-style: none;
+}
+
+.roomList p {
+  font-weight: 100;
+}
+
+.chatContainer {
+  background-color: rgb(43, 45, 45);
+  width: 100%;
+  color: rgb(103, 244, 241);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.messageList {
+  height: 70vh;
+}
+
+.messageInput {
+  height: 20vh;
+}
+
+.messageInput input {
+  width: 80%;
+  height: 20%;
+}
+
+.messageInput button {
+  padding-right: 3rem;
+  padding-left: 3rem;
+}
