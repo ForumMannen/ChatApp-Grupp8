@@ -10,7 +10,7 @@ function Login() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <button onClick={login}>Börja Chatta</button>
+        <button onClick={login}>GET STARTED</button>
       </div>
     </div>
   );
