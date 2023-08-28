@@ -17,19 +17,17 @@ app.use(cors());
 io.on("connection", (socket) => {
   console.log("New user connected: ", socket.id);
 
-  socket.on("join_room", (room) => {
+  socket.on("join_room", (room, username) => {
     socket.leave(socket.room);
     socket.join(room);
     socket.room = room;
-    // rooms.push(room);
+    socket.username = username;
     const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
     io.emit("Updated_rooms", roomList);
-    console.log(io.sockets.adapter.rooms);
   });
 
   socket.on("user_typing", (data) => {
-    socket.to(socket.room).emit("typing_status", socket.id, data.isTyping);
-    console.log(socket.id, data.isTyping);
+    socket.to(socket.room).emit("typing_status", data.isTyping, data.username);
   });
 
   socket.on("send_message", (message) => {
@@ -39,7 +37,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
     io.emit("Updated_rooms", roomList);
-    console.log(io.sockets.adapter.rooms);
   });
 });
 
@@ -51,8 +48,15 @@ function convertMapOfSetsToObjectOfArrays(mapOfSets) {
   }
 
   for (const [key, set] of mapOfSets) {
+    // if (!set.has(key)) {
+    //   objectOfArrays[key] = Array.from(set);
+    // }
     if (!set.has(key)) {
-      objectOfArrays[key] = Array.from(set);
+      const userArray = Array.from(set).map((socketId) => {
+        const socket = io.sockets.sockets.get(socketId);
+        return socket ? socket.username : "Unknown";
+      });
+      objectOfArrays[key] = userArray;
     }
   }
 
