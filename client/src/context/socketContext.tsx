@@ -70,7 +70,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (room) {
-      socket.emit("join_room", room);
+      socket.emit("join_room", room, username);
     }
   }, [room]);
 
@@ -81,42 +81,20 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     socket.on("incoming_message", (data: MessageData) => {
       setMessageList((list) => [...list, data]);
     });
-    socket.on("typing_status", (userId, isTyping) => {
-      console.log("user:", userId);
-      setUserThatIsTyping(userId);
+    socket.on("typing_status", (isTyping, username) => {
+      console.log("user:", username);
+      setUserThatIsTyping(username);
       setIsTyping(isTyping);
     });
   }, [socket]);
 
   useEffect(() => {
-    socket.emit("user_typing", { isTyping: !!message });
+    socket.emit("user_typing", { isTyping: !!message, username: username }); // //här vill vi skicka in username om vi inte sparat username på server.js i en socket.username
   }, [message]);
 
   useEffect(() => {
     console.log(updatedRoomList);
   }, [updatedRoomList]);
-
-  // useEffect(() => {
-  //   if (message.length > 0 && !isTyping) {
-  //     //socket.emit("user_typing", true);
-  //     setIsTyping(true);
-  //   } else if (message.length === 0 && isTyping) {
-  //     // socket.emit("user_typing", false);
-  //     setIsTyping(false);
-  //   }
-  //   // setIsTyping(true);
-  //   // if (message) {
-  //   //   socket.emit("user_typing", isTyping);
-  //   // }
-  // }, [message, isTyping]);
-
-  // useEffect(() => {
-  //   if (isTyping) {
-  //     socket.emit("user_typing", true);
-  //   } else {
-  //     socket.emit("user_typing", false);
-  //   }
-  // }, [isTyping]);
 
   const login = () => {
     socket.connect();

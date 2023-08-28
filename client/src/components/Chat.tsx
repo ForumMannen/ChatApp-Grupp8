@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSocket } from "../context/socketContext";
-// import { io } from "socket.io-client";
 
 function Chat() {
   const {
@@ -16,18 +15,7 @@ function Chat() {
   } = useSocket();
   const [newRoomName, setNewRoomName] = useState(""); // Här sparas värdet från inputfältet
 
-  // const [message, setMessage] = useState("");
-
-  //   const handleInputChange = () => {
-
-  //   }
-
-  // useEffect(() => {
-
-  // },[message])
-
   return (
-    // Gör dynamiskt, lista.
     <div>
       <div className="navBar">
         <input
@@ -44,9 +32,6 @@ function Chat() {
           Gå med
         </button>
         <h2>Rooms</h2>
-        {/* {updatedRoomList.map((room, index) => (
-        <li key={index}>{room} </li>
-      ))} */}
 
         <ul>
           {Object.keys(updatedRoomList).map((key: string) => {
