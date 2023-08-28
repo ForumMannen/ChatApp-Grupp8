@@ -13,6 +13,7 @@ function Chat() {
     setMessage,
     userThatIsTyping,
     isTyping,
+    room
   } = useSocket();
   const [newRoomName, setNewRoomName] = useState(""); // Här sparas värdet från inputfältet
 
@@ -46,8 +47,9 @@ function Chat() {
             <ul>
               {Object.keys(updatedRoomList).map((key: string) => {
                 const usersInRoom = updatedRoomList[key];
+                const isRoomActive = room === key;
                 return (
-                  <li key={key} onClick={() => handleClickRoom(key)}>
+                  <li key={key} className={isRoomActive ? "activeRoom" : ""} onClick={() => handleClickRoom(key)}>
                     {key}{" "}
                     {usersInRoom.map((user: string) => (
                       <p key={user}>{user}</p>
@@ -70,8 +72,8 @@ function Chat() {
               );
             })}
             {userThatIsTyping && isTyping ? (
-              <div>
-                <p>{userThatIsTyping} is typing</p>
+              <div className="isTyping">
+                <p>{userThatIsTyping} is typing...</p>
               </div>
             ) : null}
           </div>

@@ -1,16 +1,57 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:wght@100;300;500;700&display=swap");
+
+/* THE BASIC STYLING*/
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
+
+/* LOGINPAGE */
+
 .loginContainer {
-  background-color: lightcoral;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Raleway", sans-serif;
+  background-color: rgb(28, 29, 29);
+  color: rgb(67, 67, 67);
 }
 
+.loginContainer input {
+  background-color: rgb(67, 67, 67);
+  border: none;
+  color: rgb(121, 210, 209);
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  margin-right: 2rem ;
+}
+
+.loginContainer button {
+  background-color: rgb(67, 67, 67);
+  color: rgb(121, 210, 209);
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  margin-right: 2rem ;
+  border: none;
+  letter-spacing: 0.1rem;
+
+}
+
+
+
+
+/* CHATPAGE */
+
+
+
+/* --------- HEADER ---------- */ 
 .header {
+  position: fixed;
+  width: 100%;
   background-color: rgb(28, 29, 29);
   color: rgb(67, 67, 67);
   font-family: "Raleway", sans-serif;
@@ -19,22 +60,29 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1rem;
   letter-spacing: 0.7rem;
 }
 
+/* Lös höjden på hela sidan */
+
+/* --------- NAV + MESSAGE ------- */
 .appContainer {
-  background-color: aquamarine;
+  padding-top: 8rem;
+  height: 100vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   font-family: "Raleway", sans-serif;
 }
 
+
+/* -------- NAVIGATION --------- */
+
 .navBar {
   background-color: rgb(70, 72, 72);
   color: rgb(182, 255, 254);
-  height: 100vh;
-  width: 35%;
+  width: 45%;
 }
 
 .navBar h2 {
@@ -42,12 +90,14 @@
   justify-content: center;
   align-items: center;
   background-color: rgb(43, 45, 45);
-  color: rgb(103, 244, 241);
+  color: rgb(182, 255, 254);
   padding: 1rem;
   font-weight: 700;
   font-size: 2rem;
   letter-spacing: 0.07rem;
 }
+
+
 
 .createRoomContainer {
   display: flex;
@@ -59,15 +109,17 @@
 .navBar input {
   margin-right: 1rem;
   background-color: rgb(43, 45, 45);
-  border: none;
-  color: rgb(103, 244, 241);
-  padding-left: 0.5rem;
+  border-radius: 5rem;
+  border-style: solid;
+  border-color: rgb(43, 45, 45);
+  color: rgb(182, 255, 254);
+  padding-left: 0.7rem;
 }
 
 /* Knapp ej rund */
 .navBar button {
   background-color: rgb(43, 45, 45);
-  color: rgb(103, 244, 241);
+  color: rgb(182, 255, 254);
   font-size: 2.5rem;
   padding: 0rem 0.7rem;
   border-radius: 50%;
@@ -89,29 +141,75 @@
   font-weight: 100;
 }
 
+
+
+/* -------- MESSAGE ------------ */
+
 .chatContainer {
   background-color: rgb(43, 45, 45);
   width: 100%;
   color: rgb(103, 244, 241);
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .messageList {
-  height: 70vh;
+width: 100%;
+height: 87%;
+display: flex;
+flex-direction: column;
+justify-content: flex-end ;
+padding-left: 5rem;
+}
+
+.messageList h1 {
+  color: rgb(68, 202, 199);
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.messageList p {
+  color: rgb(191, 237, 236);
+  font-size: 0.9rem;
+  font-weight: 100;
+  
+}
+
+.isTyping {
+  color: rgb(191, 237, 236);
+  font-size: 0.9rem;
+  font-weight: 100;
 }
 
 .messageInput {
-  height: 20vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 2rem;
 }
 
 .messageInput input {
-  width: 80%;
-  height: 20%;
+  width: 30rem;
+  height: 3rem;
+  margin-right: 1rem;
+  border-radius: 10rem;
+  border-color: black;
+  border-style: solid;
 }
 
 .messageInput button {
-  padding-right: 3rem;
-  padding-left: 3rem;
+  background-color: rgb(28, 29, 29);
+  border: none;
+  color: rgb(90, 90, 90);
+  padding: 0.5rem 1rem;
+  border-radius: 10rem;
+  border-color: black;
+  border-style: solid;
+}
+
+.activeRoom{
+  color: rgb(242, 125, 71);
 }
