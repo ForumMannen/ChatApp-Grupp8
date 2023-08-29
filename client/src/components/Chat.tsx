@@ -87,10 +87,14 @@ function Chat() {
                     // id={username === messageContent.author ? "you" : "other"}
                     key={index}
                   >
-                    <h1>{messageContent.message}</h1>
-                    <div>
-                      <img src={messageContent.message} alt="Random gif" />
-                    </div>
+                    {messageContent.message.includes("giphy.com/media") ? (
+                      <div>
+                        <img src={messageContent.message} alt="Random gif" />
+                      </div>
+                    ) : (
+                      <h1>{messageContent.message}</h1>
+                    )}
+
                     <p>{messageContent.author}</p>
                   </div>
                 );
