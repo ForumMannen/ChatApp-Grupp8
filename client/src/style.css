@@ -176,6 +176,36 @@
   padding-bottom: 2rem;
 }
 
+/*PROVAT ATT PLACERA konversationerna åt höger resp vänster*/
+
+/* #you h1 {
+  justify-content: flex-start;
+}
+
+#you p {
+  justify-content: flex-start;
+  margin-left: 5px;
+}
+
+#other {
+  justify-content: flex-end;
+}
+
+#other h1 {
+  justify-content: flex-end;
+  background-color: aqua;
+}
+
+#other p {
+  justify-content: flex-end;
+  margin-right: 5px;
+}
+
+#author {
+  margin-left: 10px;
+  font-weight: bold;
+} */
+
 .messageList h1 {
   color: rgb(68, 202, 199);
   font-size: 1.4rem;

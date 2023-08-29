@@ -14,7 +14,7 @@ function Chat() {
     userThatIsTyping,
     isTyping,
     room,
-    randomGif,
+    username,
   } = useSocket();
   const [newRoomName, setNewRoomName] = useState(""); // Här sparas värdet från inputfältet
 
@@ -83,10 +83,13 @@ function Chat() {
             <div className="messageList">
               {messageList.map((messageContent, index) => {
                 return (
-                  <div key={index}>
+                  <div
+                    // id={username === messageContent.author ? "you" : "other"}
+                    key={index}
+                  >
                     <h1>{messageContent.message}</h1>
                     <div>
-                      <img src={randomGif} alt="Random gif" />
+                      <img src={messageContent.message} alt="Random gif" />
                     </div>
                     <p>{messageContent.author}</p>
                   </div>

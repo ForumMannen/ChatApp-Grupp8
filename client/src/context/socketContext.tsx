@@ -27,7 +27,6 @@ interface ISocketContext {
   messageList: MessageData[];
   userThatIsTyping: string;
   isTyping: boolean;
-  randomGif: string;
 }
 
 interface MessageData {
@@ -52,7 +51,6 @@ const defaultValues = {
   messageList: [],
   userThatIsTyping: "",
   isTyping: false,
-  randomGif: "",
 };
 
 const SocketContext = createContext<ISocketContext>(defaultValues);
@@ -69,7 +67,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
   const [messageList, setMessageList] = useState<MessageData[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [userThatIsTyping, setUserThatIsTyping] = useState("");
-  const [randomGif, setRandomGif] = useState("");
 
   useEffect(() => {
     if (room) {
@@ -91,22 +88,41 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
       setIsTyping(isTyping);
     });
 
-    socket.on("random_gif_fetched", (randomGif) => {
-      setRandomGif(randomGif);
-      console.log(randomGif);
-    });
+    // socket.on("random_gif_fetched", (randomGif) => {
+    //   setRandomGif(randomGif);
+    //   console.log(randomGif);
+    // });
   }, [socket]);
 
   useEffect(() => {
     socket.emit("user_typing", { isTyping: !!message, username: username }); // //här vill vi skicka in username om vi inte sparat username på server.js i en socket.username
     if (message === "/gif") {
-      socket.emit("fetch_random_gif");
+      gifFunction();
+      socket.emit("user_typing", { isTyping: !!message, username: username });
+      // socket.emit("fetch_random_gif");
     }
   }, [message]);
 
   useEffect(() => {
     console.log(updatedRoomList);
   }, [updatedRoomList]);
+
+  const gifFunction = async () => {
+    try {
+      const apiKey = import.meta.env.VITE_REACT_APP_GIPHY_API_KEY;
+      console.log(apiKey);
+
+      const response = await fetch(
+        `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`
+      );
+      const data = await response.json();
+      const randomGifUrl = data.data.images.downsized.url;
+      setMessage(randomGifUrl);
+      console.log(randomGifUrl);
+    } catch (error) {
+      console.error("Error fetching random gif", error);
+    }
+  };
 
   const login = () => {
     socket.connect();
@@ -153,7 +169,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         messageList,
         userThatIsTyping,
         isTyping,
-        randomGif,
       }}
     >
       {children}
