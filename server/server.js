@@ -4,6 +4,8 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const { log } = require("console");
 
+require("dotenv").config();
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -13,6 +15,22 @@ const io = new Server(server, {
 });
 
 app.use(cors());
+
+// app.get("/getRandomGif", async (req, res) => {
+//   try {
+//     const apiKey = process.env.GIPHY_API_KEY;
+//     const response = await fetch(
+//       `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`
+//     );
+//     const data = await response.json();
+//     const randomGifUrl = data.data.url;
+
+//     res.json({ randomGifUrl });
+//   } catch (error) {
+//     console.error("Error fetching random GIF", error);
+//     res.status(500).json({ error: "An error occurred while fetching the GIF" });
+//   }
+// });
 
 io.on("connection", (socket) => {
   console.log("New user connected: ", socket.id);
@@ -28,6 +46,22 @@ io.on("connection", (socket) => {
 
   socket.on("user_typing", (data) => {
     socket.to(socket.room).emit("typing_status", data.isTyping, data.username);
+  });
+
+  socket.on("fetch_random_gif", async () => {
+    try {
+      const apiKey = process.env.GIPHY_API_KEY;
+      const response = await fetch(
+        `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`
+      );
+      // const randomGifUrl = response.data.data.image_url;
+      const data = await response.json();
+      const randomGifUrl = data.data.images.downsized.url;
+      socket.emit("random_gif_fetched", randomGifUrl);
+      console.log(randomGifUrl);
+    } catch (error) {
+      console.error("Error fetching random gif", error);
+    }
   });
 
   socket.on("send_message", (message) => {

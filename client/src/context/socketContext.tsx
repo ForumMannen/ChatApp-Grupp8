@@ -27,6 +27,7 @@ interface ISocketContext {
   messageList: MessageData[];
   userThatIsTyping: string;
   isTyping: boolean;
+  randomGif: string;
 }
 
 interface MessageData {
@@ -51,6 +52,7 @@ const defaultValues = {
   messageList: [],
   userThatIsTyping: "",
   isTyping: false,
+  randomGif: "",
 };
 
 const SocketContext = createContext<ISocketContext>(defaultValues);
@@ -67,6 +69,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
   const [messageList, setMessageList] = useState<MessageData[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [userThatIsTyping, setUserThatIsTyping] = useState("");
+  const [randomGif, setRandomGif] = useState("");
 
   useEffect(() => {
     if (room) {
@@ -87,10 +90,18 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
       setUserThatIsTyping(username);
       setIsTyping(isTyping);
     });
+
+    socket.on("random_gif_fetched", (randomGif) => {
+      setRandomGif(randomGif);
+      console.log(randomGif);
+    });
   }, [socket]);
 
   useEffect(() => {
     socket.emit("user_typing", { isTyping: !!message, username: username }); // //här vill vi skicka in username om vi inte sparat username på server.js i en socket.username
+    if (message === "/gif") {
+      socket.emit("fetch_random_gif");
+    }
   }, [message]);
 
   useEffect(() => {
@@ -142,6 +153,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         messageList,
         userThatIsTyping,
         isTyping,
+        randomGif,
       }}
     >
       {children}
