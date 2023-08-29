@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSocket } from "../context/socketContext";
 import { FaPaperPlane } from "react-icons/fa";
 
@@ -13,10 +13,19 @@ function Chat() {
     setMessage,
     userThatIsTyping,
     isTyping,
-    room
+    room,
   } = useSocket();
   const [newRoomName, setNewRoomName] = useState(""); // Här sparas värdet från inputfältet
 
+  ///gör detta i socketContext!!!!!!!!!!
+  const messageListRef = useRef(null);
+
+  useEffect(() => {
+    // Scrollar alltid till botten när nytt innehåll läggs till
+    const messageList = messageListRef.current;
+    messageList.scrollTop = messageList.scrollHeight;
+  }, [messageList]);
+  //////////////////
   return (
     <div>
       <div className="header">
@@ -49,7 +58,11 @@ function Chat() {
                 const usersInRoom = updatedRoomList[key];
                 const isRoomActive = room === key;
                 return (
-                  <li key={key} className={isRoomActive ? "activeRoom" : ""} onClick={() => handleClickRoom(key)}>
+                  <li
+                    key={key}
+                    className={isRoomActive ? "activeRoom" : ""}
+                    onClick={() => handleClickRoom(key)}
+                  >
                     {key}{" "}
                     {usersInRoom.map((user: string) => (
                       <p key={user}>{user}</p>
@@ -62,20 +75,27 @@ function Chat() {
         </div>
 
         <div className="chatContainer">
-          <div className="messageList">
-            {messageList.map((messageContent, index) => {
-              return (
-                <div key={index}>
-                  <h1>{messageContent.message}</h1>
-                  <p>{messageContent.author}</p>
-                </div>
-              );
-            })}
-            {userThatIsTyping && isTyping ? (
-              <div className="isTyping">
-                <p>{userThatIsTyping} is typing...</p>
+          <div className="roomname">
+            <h2>{room}</h2>
+          </div>
+          <div className="messageListContainer" ref={messageListRef}>
+            <div className="messageList">
+              {messageList.map((messageContent, index) => {
+                return (
+                  <div key={index}>
+                    <h1>{messageContent.message}</h1>
+                    <p>{messageContent.author}</p>
+                  </div>
+                );
+              })}
+              <div className="isTypingContainer">
+                {userThatIsTyping && isTyping ? (
+                  <div className="isTyping">
+                    <p>{userThatIsTyping} is typing...</p>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+            </div>
           </div>
 
           <div className="messageInput">
