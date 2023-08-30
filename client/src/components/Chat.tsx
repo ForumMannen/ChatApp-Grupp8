@@ -84,7 +84,7 @@ function Chat() {
               {messageList.map((messageContent, index) => {
                 return (
                   <div
-                    // id={username === messageContent.author ? "you" : "other"}
+                    id={username === messageContent.author ? "you" : "other"}
                     key={index}
                   >
                     {messageContent.message.includes("giphy.com/media") ? (
@@ -95,7 +95,8 @@ function Chat() {
                       <h1>{messageContent.message}</h1>
                     )}
 
-                    <p>{messageContent.author}</p>
+                    <p>{messageContent.author} {messageContent.time}</p>
+                   
                   </div>
                 );
               })}

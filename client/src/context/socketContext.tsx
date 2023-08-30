@@ -33,6 +33,7 @@ interface MessageData {
   room: string;
   author: string;
   message: string;
+  time: string;
 }
 
 const defaultValues = {
@@ -78,6 +79,9 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     socket.on("Updated_rooms", (updatedRooms) => {
       setUpdatedRoomList(updatedRooms);
+      setUserThatIsTyping("");
+      setIsTyping(false);
+
     });
     socket.on("incoming_message", (data: MessageData) => {
       setMessageList((list) => [...list, data]);
@@ -88,11 +92,18 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
       setIsTyping(isTyping);
     });
 
+    socket.on("user_disconnected", () => {
+        setUserThatIsTyping("");
+        setIsTyping(false);
+    })
+
     // socket.on("random_gif_fetched", (randomGif) => {
     //   setRandomGif(randomGif);
     //   console.log(randomGif);
     // });
   }, [socket]);
+
+  
 
   useEffect(() => {
     socket.emit("user_typing", { isTyping: !!message, username: username }); // //här vill vi skicka in username om vi inte sparat username på server.js i en socket.username
@@ -116,7 +127,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`
       );
       const data = await response.json();
-      const randomGifUrl = data.data.images.downsized.url;
+      const randomGifUrl = data.data.images.fixed_height.url;
       setMessage(randomGifUrl);
       console.log(randomGifUrl);
     } catch (error) {
@@ -145,6 +156,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         room: room,
         author: username,
         message: message,
+        time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
       };
       await socket.emit("send_message", messageData);
       setMessageList((list) => [...list, messageData]);
