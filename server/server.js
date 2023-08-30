@@ -48,22 +48,6 @@ io.on("connection", (socket) => {
     socket.to(socket.room).emit("typing_status", data.isTyping, data.username);
   });
 
-  // socket.on("fetch_random_gif", async () => {
-  //   try {
-  //     const apiKey = process.env.GIPHY_API_KEY;
-  //     const response = await fetch(
-  //       `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`
-  //     );
-  //     // const randomGifUrl = response.data.data.image_url;
-  //     const data = await response.json();
-  //     const randomGifUrl = data.data.images.downsized.url;
-  //     socket.emit("random_gif_fetched", randomGifUrl);
-  //     console.log(randomGifUrl);
-  //   } catch (error) {
-  //     console.error("Error fetching random gif", error);
-  //   }
-  // });
-
   socket.on("send_message", (message) => {
     socket.to(message.room).emit("incoming_message", message);
   });
@@ -71,6 +55,8 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
     io.emit("Updated_rooms", roomList);
+    
+    socket.to(socket.room).emit("user_disconnected");
   });
 });
 
