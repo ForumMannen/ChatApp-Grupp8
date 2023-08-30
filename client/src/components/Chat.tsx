@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, RefObject } from "react";
 import { useSocket } from "../context/socketContext";
 import { FaPaperPlane } from "react-icons/fa";
 
@@ -16,17 +16,18 @@ function Chat() {
     room,
     username,
   } = useSocket();
-  const [newRoomName, setNewRoomName] = useState(""); // Här sparas värdet från inputfältet
+  const [newRoomName, setNewRoomName] = useState("");
 
-  ///gör detta i socketContext!!!!!!!!!!
-  const messageListRef = useRef(null);
+  const messageListRef: RefObject<HTMLDivElement> = useRef(null);
 
   useEffect(() => {
     // Scrollar alltid till botten när nytt innehåll läggs till
     const messageList = messageListRef.current;
-    messageList.scrollTop = messageList.scrollHeight;
+    if (messageList) {
+      messageList.scrollTop = messageList.scrollHeight;
+    }
   }, [messageList]);
-  //////////////////
+
   return (
     <div>
       <div className="header">
@@ -95,8 +96,9 @@ function Chat() {
                       <h1>{messageContent.message}</h1>
                     )}
 
-                    <p>{messageContent.author} {messageContent.time}</p>
-                   
+                    <p>
+                      {messageContent.author} {messageContent.time}
+                    </p>
                   </div>
                 );
               })}

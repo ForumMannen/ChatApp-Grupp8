@@ -81,7 +81,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
       setUpdatedRoomList(updatedRooms);
       setUserThatIsTyping("");
       setIsTyping(false);
-
     });
     socket.on("incoming_message", (data: MessageData) => {
       setMessageList((list) => [...list, data]);
@@ -93,24 +92,16 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     });
 
     socket.on("user_disconnected", () => {
-        setUserThatIsTyping("");
-        setIsTyping(false);
-    })
-
-    // socket.on("random_gif_fetched", (randomGif) => {
-    //   setRandomGif(randomGif);
-    //   console.log(randomGif);
-    // });
+      setUserThatIsTyping("");
+      setIsTyping(false);
+    });
   }, [socket]);
 
-  
-
   useEffect(() => {
-    socket.emit("user_typing", { isTyping: !!message, username: username }); // //här vill vi skicka in username om vi inte sparat username på server.js i en socket.username
+    socket.emit("user_typing", { isTyping: !!message, username: username });
     if (message === "/gif") {
       gifFunction();
       socket.emit("user_typing", { isTyping: !!message, username: username });
-      // socket.emit("fetch_random_gif");
     }
   }, [message]);
 
@@ -156,7 +147,10 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         room: room,
         author: username,
         message: message,
-        time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
       };
       await socket.emit("send_message", messageData);
       setMessageList((list) => [...list, messageData]);
