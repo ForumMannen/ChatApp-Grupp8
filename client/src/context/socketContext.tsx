@@ -86,7 +86,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
       setMessageList((list) => [...list, data]);
     });
     socket.on("typing_status", (isTyping, username) => {
-      console.log("user:", username);
       setUserThatIsTyping(username);
       setIsTyping(isTyping);
     });
@@ -105,14 +104,9 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     }
   }, [message]);
 
-  useEffect(() => {
-    console.log(updatedRoomList);
-  }, [updatedRoomList]);
-
   const gifFunction = async () => {
     try {
       const apiKey = import.meta.env.VITE_REACT_APP_GIPHY_API_KEY;
-      console.log(apiKey);
 
       const response = await fetch(
         `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`
@@ -120,7 +114,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
       const data = await response.json();
       const randomGifUrl = data.data.images.fixed_height.url;
       setMessage(randomGifUrl);
-      console.log(randomGifUrl);
     } catch (error) {
       console.error("Error fetching random gif", error);
     }
@@ -137,7 +130,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
   };
 
   const handleClickRoom = (key: string) => {
-    console.log("jag har klickat:", key);
     setRoom(key);
   };
 
