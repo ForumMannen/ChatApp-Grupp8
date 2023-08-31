@@ -21,7 +21,6 @@ function Chat() {
   const messageListRef: RefObject<HTMLDivElement> = useRef(null);
 
   useEffect(() => {
-    // Scrollar alltid till botten när nytt innehåll läggs till
     const messageList = messageListRef.current;
     if (messageList) {
       messageList.scrollTop = messageList.scrollHeight;

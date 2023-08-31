@@ -15,8 +15,6 @@ const io = new Server(server, {
 app.use(cors());
 
 io.on("connection", (socket) => {
-  console.log("New user connected: ", socket.id);
-
   socket.on("join_room", (room, username) => {
     socket.leave(socket.room);
     socket.join(room);
